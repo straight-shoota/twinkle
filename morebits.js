@@ -3561,8 +3561,13 @@ Morebits.batchOperation = function(currentAction) {
 		// update overall status line
 		var total = ctx.pageList.length;
 		if (ctx.countFinished === total) {
-			ctx.statusElement.info("100% (" + ctx.countFinishedSuccess + 
-				"/" + ctx.countFinished + " completed successfully)");
+			var statusString = "Done (" + ctx.countFinishedSuccess + 
+				"/" + ctx.countFinished + " actions completed successfully)";
+			if (ctx.countFinishedSuccess < ctx.countFinished) {
+				ctx.statusElement.warn(statusString);
+			} else {
+				ctx.statusElement.info(statusString);
+			}
 			Morebits.wiki.removeCheckpoint();
 			ctx.running = false;
 			return;
@@ -3570,7 +3575,7 @@ Morebits.batchOperation = function(currentAction) {
 		
 		// just for giggles! (well, serious debugging, actually)
 		if (ctx.countFinished > total) {
-			ctx.statusElement.warn("100% (overshot by " + (ctx.countFinished - total) + ")");
+			ctx.statusElement.warn("Done (overshot by " + (ctx.countFinished - total) + ")");
 			Morebits.wiki.removeCheckpoint();
 			ctx.running = false;
 			return;
